@@ -61,7 +61,11 @@ if __name__ == "__main__":
     load_dotenv()
     server = login(os.environ.get("EMAIL"), os.environ.get("PASSWORD"))
     mailbox = select_mailbox(server, "INBOX")
-    emails = fetch_new_mail(mailbox)
+    try:
+        emails = fetch_new_mail(mailbox)
+    except IndexError:
+        emails = fetch_new_mail(mailbox)
+
     if emails:
         for mail in emails:
             FROM1 = os.environ.get("FROM1")
@@ -73,16 +77,17 @@ if __name__ == "__main__":
                                         SUBJECT1 in mail['subject'] or \
                                         SUBJECT2 in mail['subject'] or \
                                         SUBJECT3 in mail['subject']:
+                print("Email found!")
                 print(mail)
                 print()
-    close(server)
 
-    params = {
-        "access_token": os.environ.get("ACCESS_TOKEN"),
-        "secret_token": os.environ.get("SECRET_TOKEN"),
-        "monkey": os.environ.get("MONKEY"),
-        "announcement": os.environ.get("ANNOUNCEMENT"),
-    }
+                params = {
+                    "access_token": os.environ.get("ACCESS_TOKEN"),
+                    "secret_token": os.environ.get("SECRET_TOKEN"),
+                    "monkey": os.environ.get("MONKEY"),
+                    "announcement": os.environ.get("ANNOUNCEMENT"),
+                }
+                requests.get('https://api.voicemonkey.io/trigger', params=params)
+        close(server)
 
-    requests.get('https://api.voicemonkey.io/trigger', params=params)
     print("Request sent.")
