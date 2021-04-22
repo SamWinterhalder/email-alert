@@ -1,4 +1,4 @@
-#! /usr/bin/python3
+# /usr/bin/python3
 
 import email
 import os
@@ -88,6 +88,5 @@ if __name__ == "__main__":
                     "announcement": os.environ.get("ANNOUNCEMENT"),
                 }
                 requests.get('https://api.voicemonkey.io/trigger', params=params)
-        close(server)
-
-    print("Request sent.")
+                print("Request sent.")
+    close(server)
